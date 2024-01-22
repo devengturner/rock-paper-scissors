@@ -1,25 +1,28 @@
 "use strict";
 
+const rockButton = document.querySelector(".btn--rock");
+const paperButton = document.querySelector(".btn--paper");
+const scissorsButton = document.querySelector(".btn--scissors");
+const playerChoiceEl = document.querySelector(".player-choice");
+const computerChoiceEl = document.querySelector(".computer-choice");
+const playerScoreEl = document.querySelector(".player-score");
+const computerScoreEl = document.querySelector(".computer-score");
+const scoreContainerEl = document.querySelector(".score-container");
+
 const choices = ["rock", "paper", "scissors"];
 
 let computerScore = 0;
 let playerScore = 0;
 
-function getComputerSelection() {
+const getComputerSelection = function () {
   let randomNumber = Math.trunc(Math.random() * 3);
   return choices[randomNumber];
-}
+};
 
 function playRound(computerSelection, playerSelection) {
-  const lowerCasePlayerSelection = playerSelection.toLowerCase();
-
-  switch (lowerCasePlayerSelection) {
+  switch (playerSelection) {
     case "rock":
       if (computerSelection === "rock") {
-        return playRound(
-          getComputerSelection(),
-          prompt("Enter rock, paper, or scissors.")
-        );
       } else if (computerSelection === "paper") {
         computerScore++;
       } else {
@@ -31,10 +34,6 @@ function playRound(computerSelection, playerSelection) {
       if (computerSelection === "rock") {
         playerScore++;
       } else if (computerSelection === "paper") {
-        return playRound(
-          getComputerSelection(),
-          prompt("Enter rock, paper, or scissors.")
-        );
       } else {
         computerScore++;
       }
@@ -46,24 +45,34 @@ function playRound(computerSelection, playerSelection) {
       } else if (computerSelection === "paper") {
         playerScore++;
       } else {
-        return playRound(
-          getComputerSelection(),
-          prompt("Enter rock, paper, or scissors.")
-        );
       }
       break;
   }
+  playerChoiceEl.textContent = `Player Choice: ${playerSelection}`;
+  computerChoiceEl.textContent = `Computer Choice: ${computerSelection}`;
 
-  console.log(`Player: ${playerSelection} Computer: ${computerSelection}`);
-  console.log(`Player: ${playerScore} Computer: ${computerScore}`);
+  playerScoreEl.textContent = `Player Score: ${playerScore}`;
+  computerScoreEl.textContent = `Computer Score: ${computerScore}`;
+  console.log("rock button");
+
+  if (playerScore + computerScore === 5) {
+    const result = document.createElement("p");
+    if (playerScore > computerScore) {
+      result.textContent = "You win!";
+      scoreContainerEl.appendChild(result);
+    } else {
+      result.textContent = "You lose!";
+      scoreContainerEl.appendChild(result);
+    }
+  }
 }
 
-// playRound(computerSelection, playerSelection);
-function game() {
-  const computerSelection = getComputerSelection();
-  const playerSelection = prompt("Enter rock, paper, or scissors.");
-
-  playRound(computerSelection, playerSelection);
-}
-
-game();
+rockButton.addEventListener("click", () =>
+  playRound(getComputerSelection(), "rock")
+);
+paperButton.addEventListener("click", () =>
+  playRound(getComputerSelection(), "paper")
+);
+scissorsButton.addEventListener("click", () =>
+  playRound(getComputerSelection(), "scissors")
+);
